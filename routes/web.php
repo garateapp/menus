@@ -67,7 +67,9 @@ Route::middleware(['auth', 'active', 'role:Supplier'])->prefix('supplier')->name
     Route::post('/daily-menus/{dailyMenu}/menu-options', [SupplierMenuOptionController::class, 'store'])->name('menu-options.store');
     Route::patch('/menu-options/{menuOption}', [SupplierMenuOptionController::class, 'update'])->name('menu-options.update');
     Route::get('/reports/daily', [SupplierReportController::class, 'daily'])->name('reports.daily');
+    Route::get('/reports/daily/export', [SupplierReportController::class, 'exportDaily'])->name('reports.daily.export');
     Route::get('/reports/weekly', [SupplierReportController::class, 'weekly'])->name('reports.weekly');
+    Route::get('/reports/weekly/export', [SupplierReportController::class, 'exportWeekly'])->name('reports.weekly.export');
 });
 
 Route::middleware(['auth', 'active', 'role:SuperAdmin'])->prefix('superadmin')->name('superadmin.')->group(function () {

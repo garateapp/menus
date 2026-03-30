@@ -21,10 +21,6 @@ class MenuSelectionService
             throw new AuthorizationException('Tu cuenta está inactiva.');
         }
 
-        if ($dailyMenu->weeklyMenu->status !== MenuStatus::Published) {
-            throw new AuthorizationException('La semana no está publicada.');
-        }
-
         if ($dailyMenu->weeklyMenu->status === MenuStatus::Closed) {
             throw new AuthorizationException('La semana está cerrada.');
         }

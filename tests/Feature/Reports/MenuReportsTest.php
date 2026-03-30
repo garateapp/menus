@@ -70,12 +70,12 @@ class MenuReportsTest extends TestCase
         );
     }
 
-    public function test_daily_report_defaults_to_the_latest_available_day_for_the_supplier(): void
+    public function test_daily_report_defaults_to_today_when_the_supplier_has_data_for_today(): void
     {
         $supplier = $this->createSupplier();
         [$weeklyMenu, $dailyMenu] = $this->createReportScenario($supplier);
 
-        $laterDailyMenu = DailyMenu::query()->create([
+        DailyMenu::query()->create([
             'weekly_menu_id' => $weeklyMenu->id,
             'menu_date' => now()->addDay()->toDateString(),
             'status' => MenuStatus::Published,
@@ -85,7 +85,20 @@ class MenuReportsTest extends TestCase
 
         $response->assertInertia(fn (Assert $page) => $page
             ->component('Supplier/Reports/Daily')
-            ->where('report.date', $laterDailyMenu->menu_date->toDateString())
+            ->where('selectedDate', today()->toDateString())
+            ->where('report.date', $dailyMenu->menu_date->toDateString())
+        );
+    }
+
+    public function test_daily_report_defaults_to_today_even_without_menu_data(): void
+    {
+        $supplier = $this->createSupplier();
+
+        $response = $this->actingAs($supplier)->get(route('supplier.reports.daily'));
+
+        $response->assertInertia(fn (Assert $page) => $page
+            ->component('Supplier/Reports/Daily')
+            ->where('selectedDate', today()->toDateString())
         );
     }
 
@@ -112,6 +125,77 @@ class MenuReportsTest extends TestCase
         );
 
         $this->assertNotSame($firstWeeklyMenu->id, $laterWeeklyMenu->id);
+    }
+
+    public function test_weekly_report_supports_selecting_a_day_inside_the_week(): void
+    {
+        $supplier = $this->createSupplier();
+        [$weeklyMenu, $dailyMenu, $firstOption, $secondOption] = $this->createReportScenario($supplier);
+
+        $secondDay = DailyMenu::query()->create([
+            'weekly_menu_id' => $weeklyMenu->id,
+            'menu_date' => now()->addDay()->toDateString(),
+            'status' => MenuStatus::Published,
+        ]);
+
+        $thirdOption = MenuOption::query()->create([
+            'daily_menu_id' => $secondDay->id,
+            'title' => 'Vegetariano',
+            'description' => null,
+            'quota' => null,
+            'is_visible' => true,
+            'sort_order' => 1,
+        ]);
+
+        MenuSelection::query()->create([
+            'user_id' => $this->createWorker()->id,
+            'daily_menu_id' => $dailyMenu->id,
+            'menu_option_id' => $firstOption->id,
+            'selected_at' => now(),
+        ]);
+
+        MenuSelection::query()->create([
+            'user_id' => $this->createWorker()->id,
+            'daily_menu_id' => $secondDay->id,
+            'menu_option_id' => $thirdOption->id,
+            'selected_at' => now(),
+        ]);
+
+        $response = $this->actingAs($supplier)->get(route('supplier.reports.weekly', [
+            'weekly_menu_id' => $weeklyMenu->id,
+            'day' => $secondDay->menu_date->toDateString(),
+        ]));
+
+        $response->assertInertia(fn (Assert $page) => $page
+            ->component('Supplier/Reports/Weekly')
+            ->where('selectedDay', $secondDay->menu_date->toDateString())
+            ->where('report.selectedDay.date', $secondDay->menu_date->toDateString())
+            ->where('report.selectedDay.totalSelections', 1)
+            ->has('report.selectedDay.options', 1)
+        );
+    }
+
+    public function test_supplier_can_export_the_weekly_report_as_excel_compatible_file(): void
+    {
+        $supplier = $this->createSupplier();
+        [$weeklyMenu, $dailyMenu, $firstOption] = $this->createReportScenario($supplier);
+
+        MenuSelection::query()->create([
+            'user_id' => $this->createWorker()->id,
+            'daily_menu_id' => $dailyMenu->id,
+            'menu_option_id' => $firstOption->id,
+            'selected_at' => now(),
+        ]);
+
+        $response = $this->actingAs($supplier)->get(route('supplier.reports.weekly.export', [
+            'weekly_menu_id' => $weeklyMenu->id,
+        ]));
+
+        $response->assertOk();
+        $response->assertHeader('content-type', 'application/vnd.ms-excel; charset=UTF-8');
+        $response->assertHeader('content-disposition');
+        $response->assertSee($weeklyMenu->title, false);
+        $response->assertSee($firstOption->title, false);
     }
 
     public function test_supplier_report_pages_render_empty_state_instead_of_404_when_no_data_exists(): void

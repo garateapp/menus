@@ -42,4 +42,16 @@ class DailyReportService
             'options' => $options,
         ];
     }
+
+    public function availableDatesForSupplier(User $supplier): array
+    {
+        return DailyMenu::query()
+            ->whereHas('weeklyMenu', fn ($query) => $query->where('supplier_id', $supplier->id))
+            ->orderByDesc('menu_date')
+            ->pluck('menu_date')
+            ->map(fn ($date) => $date instanceof \DateTimeInterface ? $date->format('Y-m-d') : (string) $date)
+            ->unique()
+            ->values()
+            ->all();
+    }
 }

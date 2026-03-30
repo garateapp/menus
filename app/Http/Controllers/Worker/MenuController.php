@@ -20,7 +20,8 @@ class MenuController extends Controller
         $menus = DailyMenu::query()
             ->whereDate('menu_date', '>=', $calendar['range_start'])
             ->whereDate('menu_date', '<=', $calendar['range_end'])
-            ->whereHas('weeklyMenu', fn ($query) => $query->where('status', MenuStatus::Published))
+            ->where('status', MenuStatus::Published)
+            ->whereHas('weeklyMenu', fn ($query) => $query->where('status', '!=', MenuStatus::Closed))
             ->with([
                 'weeklyMenu',
                 'menuOptions' => fn ($query) => $query->where('is_visible', true)->withCount('selections'),

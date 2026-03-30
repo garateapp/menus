@@ -55,7 +55,7 @@ class MenuSelectionTest extends TestCase
         ]);
     }
 
-    public function test_worker_can_not_select_when_the_week_is_not_published(): void
+    public function test_worker_can_select_when_the_day_is_published_even_if_the_week_is_still_draft(): void
     {
         $worker = $this->createWorker();
         [$dailyMenu, $menuOption] = $this->createPublishedMenuScenario(weekStatus: MenuStatus::Draft);
@@ -64,8 +64,12 @@ class MenuSelectionTest extends TestCase
             'menu_option_id' => $menuOption->id,
         ]);
 
-        $response->assertForbidden();
-        $this->assertDatabaseCount('menu_selections', 0);
+        $response->assertRedirect();
+        $this->assertDatabaseHas('menu_selections', [
+            'user_id' => $worker->id,
+            'daily_menu_id' => $dailyMenu->id,
+            'menu_option_id' => $menuOption->id,
+        ]);
     }
 
     public function test_worker_can_not_select_when_the_week_is_closed(): void
@@ -180,6 +184,25 @@ class MenuSelectionTest extends TestCase
             'daily_menu_id' => $dailyMenu->id,
             'menu_option_id' => $menuOption->id,
         ]);
+    }
+
+    public function test_worker_calendar_shows_published_days_even_if_the_week_is_in_draft(): void
+    {
+        $worker = $this->createWorker();
+        [$dailyMenu] = $this->createPublishedMenuScenario(weekStatus: MenuStatus::Draft);
+
+        $response = $this->actingAs($worker)->get(route('worker.menus.index', [
+            'view' => 'week',
+            'date' => $dailyMenu->menu_date->toDateString(),
+        ]));
+
+        $response->assertInertia(fn ($page) => $page
+            ->component('Worker/Menus/Index')
+            ->where('calendar.cells.0.date', $dailyMenu->menu_date->toDateString())
+            ->where('calendar.cells.0.has_day', true)
+            ->where('calendar.cells.0.status', MenuStatus::Published->value)
+            ->where('calendar.cells.0.options_count', 1)
+        );
     }
 
     private function createWorker(): User

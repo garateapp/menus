@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Supplier;
 
 use App\Http\Controllers\Controller;
 use App\Services\Reports\DailyReportService;
+use App\Services\Reports\ReportExportService;
 use App\Services\Reports\WeeklyReportService;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response as HttpResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -13,19 +15,98 @@ class ReportController extends Controller
 {
     public function daily(Request $request, DailyReportService $dailyReportService): Response
     {
-        $date = $request->query('date');
+        $selectedDate = $request->query('date') ?: today()->toDateString();
+        $availableDates = $dailyReportService->availableDatesForSupplier($request->user());
 
         return Inertia::render('Supplier/Reports/Daily', [
-            'report' => $dailyReportService->buildForSupplier($request->user(), $date),
+            'selectedDate' => $selectedDate,
+            'availableDates' => $availableDates,
+            'report' => $dailyReportService->buildForSupplier($request->user(), $selectedDate),
         ]);
     }
 
     public function weekly(Request $request, WeeklyReportService $weeklyReportService): Response
     {
         $weeklyMenuId = $request->query('weekly_menu_id');
+        $selectedDay = $request->query('day');
+        $availableWeeks = $weeklyReportService->availableWeeksForSupplier($request->user());
 
         return Inertia::render('Supplier/Reports/Weekly', [
-            'report' => $weeklyReportService->buildForSupplier($request->user(), $weeklyMenuId),
+            'availableWeeks' => $availableWeeks,
+            'selectedWeeklyMenuId' => $weeklyMenuId ? (int) $weeklyMenuId : null,
+            'selectedDay' => $selectedDay,
+            'report' => $weeklyReportService->buildForSupplier($request->user(), $weeklyMenuId, $selectedDay),
         ]);
+    }
+
+    public function exportDaily(
+        Request $request,
+        DailyReportService $dailyReportService,
+        ReportExportService $reportExportService,
+    ): HttpResponse {
+        $selectedDate = $request->query('date') ?: today()->toDateString();
+        $report = $dailyReportService->buildForSupplier($request->user(), $selectedDate);
+
+        abort_unless($report, 404);
+
+        return $reportExportService->excelResponse(
+            'reporte-diario-'.$report['date'],
+            'Reporte diario '.$report['date'],
+            [[
+                'title' => $report['weekTitle'],
+                'description' => 'Total a confeccionar: '.$report['totalSelections'],
+                'headers' => ['Fecha', 'Alternativa', 'Descripción', 'Cantidad seleccionada'],
+                'rows' => collect($report['options'])
+                    ->map(fn ($option) => [
+                        $report['date'],
+                        $option['title'],
+                        $option['description'] ?: 'Sin descripción',
+                        $option['totalSelections'],
+                    ])
+                    ->all(),
+            ]]
+        );
+    }
+
+    public function exportWeekly(
+        Request $request,
+        WeeklyReportService $weeklyReportService,
+        ReportExportService $reportExportService,
+    ): HttpResponse {
+        $report = $weeklyReportService->buildForSupplier(
+            $request->user(),
+            $request->query('weekly_menu_id'),
+            $request->query('day'),
+        );
+
+        abort_unless($report, 404);
+
+        $sections = collect($report['days'])->map(function (array $day) {
+            $rows = collect($day['options'] ?? [])
+                ->map(fn ($option) => [
+                    $day['menuDate'],
+                    $option['title'],
+                    $option['description'] ?: 'Sin descripción',
+                    $option['totalSelections'],
+                ])
+                ->all();
+
+            if ($rows === []) {
+                $rows[] = [$day['menuDate'], 'Sin alternativas', '', 0];
+            }
+
+            return [
+                'title' => 'Día '.($day['menuDate']),
+                'description' => 'Estado: '.$day['status'].' | Total selecciones: '.$day['totalSelections'],
+                'headers' => ['Fecha', 'Menú', 'Descripción', 'Cantidad seleccionada'],
+                'rows' => $rows,
+            ];
+        })->all();
+
+        return $reportExportService->excelResponse(
+            'reporte-semanal-'.$report['weeklyMenuId'],
+            'Reporte semanal '.$report['title'],
+            $sections
+        );
     }
 }
