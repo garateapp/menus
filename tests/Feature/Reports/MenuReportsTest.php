@@ -22,15 +22,18 @@ class MenuReportsTest extends TestCase
         $supplier = $this->createSupplier();
         [$weeklyMenu, $dailyMenu, $firstOption, $secondOption] = $this->createReportScenario($supplier);
 
+        $firstWorker = $this->createWorker(['name' => 'Juan Pérez']);
+        $secondWorker = $this->createWorker(['name' => 'María Soto']);
+
         MenuSelection::query()->create([
-            'user_id' => $this->createWorker()->id,
+            'user_id' => $firstWorker->id,
             'daily_menu_id' => $dailyMenu->id,
             'menu_option_id' => $firstOption->id,
             'selected_at' => now(),
         ]);
 
         MenuSelection::query()->create([
-            'user_id' => $this->createWorker()->id,
+            'user_id' => $secondWorker->id,
             'daily_menu_id' => $dailyMenu->id,
             'menu_option_id' => $secondOption->id,
             'selected_at' => now(),
@@ -44,6 +47,9 @@ class MenuReportsTest extends TestCase
             ->component('Supplier/Reports/Daily')
             ->where('report.totalSelections', 2)
             ->has('report.options', 2)
+            ->has('report.selections', 2)
+            ->where('report.selections.0.userName', 'Juan Pérez')
+            ->where('report.selections.0.optionTitle', 'Pollo')
         );
     }
 
@@ -192,10 +198,29 @@ class MenuReportsTest extends TestCase
         ]));
 
         $response->assertOk();
-        $response->assertHeader('content-type', 'application/vnd.ms-excel; charset=UTF-8');
-        $response->assertHeader('content-disposition');
-        $response->assertSee($weeklyMenu->title, false);
-        $response->assertSee($firstOption->title, false);
+        $response->assertHeader('content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        $response->assertDownload('reporte-semanal-'.$weeklyMenu->id.'.xlsx');
+    }
+
+    public function test_supplier_can_export_the_daily_report_as_native_excel_file(): void
+    {
+        $supplier = $this->createSupplier();
+        [$weeklyMenu, $dailyMenu, $firstOption] = $this->createReportScenario($supplier);
+
+        MenuSelection::query()->create([
+            'user_id' => $this->createWorker()->id,
+            'daily_menu_id' => $dailyMenu->id,
+            'menu_option_id' => $firstOption->id,
+            'selected_at' => now(),
+        ]);
+
+        $response = $this->actingAs($supplier)->get(route('supplier.reports.daily.export', [
+            'date' => $dailyMenu->menu_date->toDateString(),
+        ]));
+
+        $response->assertOk();
+        $response->assertHeader('content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        $response->assertDownload('reporte-diario-'.$dailyMenu->menu_date->toDateString().'.xlsx');
     }
 
     public function test_supplier_report_pages_render_empty_state_instead_of_404_when_no_data_exists(): void
@@ -218,14 +243,31 @@ class MenuReportsTest extends TestCase
 
     public function test_superadmin_can_view_the_global_reports_index(): void
     {
-        Role::findOrCreate('SuperAdmin', 'web');
+        $supplier = $this->createSupplier();
+        [$weeklyMenu, $dailyMenu, $firstOption] = $this->createReportScenario($supplier);
+        $worker = $this->createWorker(['name' => 'Trabajador Control']);
 
-        $superAdmin = User::factory()->create();
-        $superAdmin->assignRole('SuperAdmin');
+        MenuSelection::query()->create([
+            'user_id' => $worker->id,
+            'daily_menu_id' => $dailyMenu->id,
+            'menu_option_id' => $firstOption->id,
+            'selected_at' => now(),
+        ]);
 
-        $response = $this->actingAs($superAdmin)->get(route('superadmin.reports.index'));
+        $superAdmin = $this->createSuperAdmin();
 
-        $response->assertOk();
+        $response = $this->actingAs($superAdmin)->get(route('superadmin.reports.index', [
+            'date' => $dailyMenu->menu_date->toDateString(),
+        ]));
+
+        $response->assertInertia(fn (Assert $page) => $page
+            ->component('SuperAdmin/Reports/Index')
+            ->where('selectedDate', $dailyMenu->menu_date->toDateString())
+            ->where('dailyReport.totalSelections', 1)
+            ->has('dailyReport.selections', 1)
+            ->where('dailyReport.selections.0.userName', 'Trabajador Control')
+            ->where('dailyReport.selections.0.optionTitle', 'Pollo')
+        );
     }
 
     private function createSupplier(): User
@@ -238,14 +280,24 @@ class MenuReportsTest extends TestCase
         return $supplier;
     }
 
-    private function createWorker(): User
+    private function createWorker(array $attributes = []): User
     {
         Role::findOrCreate('Worker', 'web');
 
-        $worker = User::factory()->create();
+        $worker = User::factory()->create($attributes);
         $worker->assignRole('Worker');
 
         return $worker;
+    }
+
+    private function createSuperAdmin(array $attributes = []): User
+    {
+        Role::findOrCreate('SuperAdmin', 'web');
+
+        $superAdmin = User::factory()->create($attributes);
+        $superAdmin->assignRole('SuperAdmin');
+
+        return $superAdmin;
     }
 
     private function createReportScenario(User $supplier): array

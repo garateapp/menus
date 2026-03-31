@@ -1,0 +1,152 @@
+@page {
+  size: A4;
+  margin: 18mm 16mm 18mm 16mm;
+}
+
+:root {
+  color-scheme: light;
+  --ink: #163028;
+  --muted: #55766b;
+  --border: #d9e7df;
+  --surface: #f6fbf8;
+  --accent: #1f9d74;
+  --accent-soft: #e4f6ee;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #eef5f1;
+  color: var(--ink);
+  font-family: "Segoe UI", Arial, sans-serif;
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+article {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 28px 34px;
+  box-shadow: 0 18px 40px -28px rgba(21, 49, 41, 0.28);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: #10271f;
+  line-height: 1.2;
+  page-break-after: avoid;
+}
+
+h1 {
+  margin: 0 0 14px;
+  font-size: 28px;
+}
+
+h2 {
+  margin-top: 28px;
+  margin-bottom: 10px;
+  padding-top: 6px;
+  border-top: 1px solid var(--border);
+  font-size: 20px;
+}
+
+h3 {
+  margin-top: 22px;
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+p,
+ul,
+ol,
+table,
+blockquote,
+figure {
+  margin-top: 0;
+  margin-bottom: 14px;
+}
+
+ul,
+ol {
+  padding-left: 20px;
+}
+
+li + li {
+  margin-top: 4px;
+}
+
+blockquote {
+  margin-left: 0;
+  padding: 14px 16px;
+  border-left: 4px solid var(--accent);
+  background: var(--accent-soft);
+  border-radius: 12px;
+  color: var(--ink);
+}
+
+img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 12px auto 6px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: 0 20px 44px -30px rgba(10, 35, 28, 0.26);
+  page-break-inside: avoid;
+}
+
+em {
+  color: var(--muted);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  page-break-inside: avoid;
+}
+
+th,
+td {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  vertical-align: top;
+  text-align: left;
+}
+
+th {
+  background: var(--surface);
+  font-weight: 700;
+}
+
+code {
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: var(--surface);
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 11px;
+}
+
+.meta {
+  margin-bottom: 24px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: linear-gradient(135deg, #fbfefd 0%, var(--surface) 100%);
+  color: var(--muted);
+}
+
+.meta strong {
+  color: var(--ink);
+}

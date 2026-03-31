@@ -48,12 +48,21 @@ export default function Weekly({ availableWeeks, selectedWeeklyMenuId, selectedD
                 }))}
               />
             </div>
-            <Link
-              href={route('supplier.reports.weekly.export', { weekly_menu_id: selectedWeekValue, ...(selectedDay ? { day: selectedDay } : {}) })}
-              className={`btn btn-outline rounded-full px-5 ${report ? '' : 'btn-disabled pointer-events-none'}`}
-            >
-              Exportar Excel
-            </Link>
+            {report ? (
+              <a
+                href={route('supplier.reports.weekly.export', {
+                  weekly_menu_id: selectedWeekValue,
+                  ...(selectedDay ? { day: selectedDay } : {}),
+                })}
+                className="btn btn-outline rounded-full px-5"
+              >
+                Exportar Excel
+              </a>
+            ) : (
+              <span className="btn btn-outline btn-disabled pointer-events-none rounded-full px-5">
+                Exportar Excel
+              </span>
+            )}
           </>
         }
       />

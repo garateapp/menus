@@ -2,32 +2,26 @@
 
 namespace App\Services\Reports;
 
-use Illuminate\Http\Response;
-use Illuminate\Support\Str;
+use App\Exports\DailyReportExport;
+use App\Exports\WeeklyReportExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ReportExportService
 {
-    public function excelResponse(string $filename, string $title, array $sections): Response
+    public function downloadDailyReport(array $report): BinaryFileResponse
     {
-        $content = view('exports.report-excel', [
-            'title' => $title,
-            'sections' => $sections,
-        ])->render();
-
-        return response($content, 200, [
-            'Content-Type' => 'application/vnd.ms-excel; charset=UTF-8',
-            'Content-Disposition' => 'attachment; filename="'.$this->sanitizeFilename($filename).'.xls"',
-        ]);
+        return Excel::download(
+            new DailyReportExport($report),
+            'reporte-diario-'.$report['date'].'.xlsx'
+        );
     }
 
-    private function sanitizeFilename(string $filename): string
+    public function downloadWeeklyReport(array $report): BinaryFileResponse
     {
-        return Str::of($filename)
-            ->ascii()
-            ->replace(' ', '-')
-            ->replaceMatches('/[^A-Za-z0-9\-_]/', '')
-            ->trim('-')
-            ->lower()
-            ->value();
+        return Excel::download(
+            new WeeklyReportExport($report),
+            'reporte-semanal-'.$report['weeklyMenuId'].'.xlsx'
+        );
     }
 }

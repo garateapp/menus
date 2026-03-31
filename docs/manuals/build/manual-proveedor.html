@@ -1,0 +1,529 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Manual de Usuario: Proveedor</title>
+    <style>@page {
+  size: A4;
+  margin: 18mm 16mm 18mm 16mm;
+}
+
+:root {
+  color-scheme: light;
+  --ink: #163028;
+  --muted: #55766b;
+  --border: #d9e7df;
+  --surface: #f6fbf8;
+  --accent: #1f9d74;
+  --accent-soft: #e4f6ee;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #eef5f1;
+  color: var(--ink);
+  font-family: "Segoe UI", Arial, sans-serif;
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+article {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 28px 34px;
+  box-shadow: 0 18px 40px -28px rgba(21, 49, 41, 0.28);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: #10271f;
+  line-height: 1.2;
+  page-break-after: avoid;
+}
+
+h1 {
+  margin: 0 0 14px;
+  font-size: 28px;
+}
+
+h2 {
+  margin-top: 28px;
+  margin-bottom: 10px;
+  padding-top: 6px;
+  border-top: 1px solid var(--border);
+  font-size: 20px;
+}
+
+h3 {
+  margin-top: 22px;
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+p,
+ul,
+ol,
+table,
+blockquote,
+figure {
+  margin-top: 0;
+  margin-bottom: 14px;
+}
+
+ul,
+ol {
+  padding-left: 20px;
+}
+
+li + li {
+  margin-top: 4px;
+}
+
+blockquote {
+  margin-left: 0;
+  padding: 14px 16px;
+  border-left: 4px solid var(--accent);
+  background: var(--accent-soft);
+  border-radius: 12px;
+  color: var(--ink);
+}
+
+img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 12px auto 6px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: 0 20px 44px -30px rgba(10, 35, 28, 0.26);
+  page-break-inside: avoid;
+}
+
+em {
+  color: var(--muted);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  page-break-inside: avoid;
+}
+
+th,
+td {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  vertical-align: top;
+  text-align: left;
+}
+
+th {
+  background: var(--surface);
+  font-weight: 700;
+}
+
+code {
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: var(--surface);
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 11px;
+}
+
+.meta {
+  margin-bottom: 24px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: linear-gradient(135deg, #fbfefd 0%, var(--surface) 100%);
+  color: var(--muted);
+}
+
+.meta strong {
+  color: var(--ink);
+}
+</style>
+  </head>
+  <body>
+    <main>
+      <article>
+        <div class="meta">
+          <strong>Manual de Usuario: Proveedor</strong><br />
+          Documento generado automáticamente desde Markdown el 30-03-2026 15:14.
+        </div>
+        <h1>Manual de Usuario: Proveedor</h1>
+<blockquote>
+<p>Este manual explica cómo acceder a la plataforma <strong>Menú</strong> y operar el perfil <strong>Proveedor</strong> para planificar semanas, configurar días, administrar alternativas y revisar reportes.<br/>
+Las capturas fueron tomadas en un ambiente de ejemplo; algunos nombres, fechas o cantidades pueden variar en producción.</p>
+</blockquote>
+<p><img alt="Pantalla de acceso al sistema" src="file:///C:/Users/Lenovo/Herd/menus/docs/manuals/screenshots/login.png"/></p>
+<p><em>Figura 1. Pantalla de acceso a Menú.</em></p>
+<h2>1. Objetivo del perfil Proveedor</h2>
+<p>El perfil <strong>Proveedor</strong> permite gestionar la operación semanal de almuerzos para el packing:</p>
+<ul>
+<li>revisar el estado de la semana activa</li>
+<li>navegar por el calendario en vista mensual, semanal o diaria</li>
+<li>crear y editar semanas</li>
+<li>configurar días de menú</li>
+<li>crear y actualizar alternativas por cada día</li>
+<li>definir cupos y visibilidad de cada alternativa</li>
+<li>revisar reportes diarios y semanales</li>
+<li>exportar reportes a Excel nativo (<code>.xlsx</code>)</li>
+</ul>
+<h2>2. Requisitos para ingresar</h2>
+<p>Antes de usar la plataforma, asegúrate de contar con:</p>
+<ul>
+<li>la URL oficial entregada por la empresa</li>
+<li>un usuario activo con rol <strong>Proveedor</strong></li>
+<li>acceso con Google corporativo o con correo y contraseña</li>
+</ul>
+<h2>3. Inicio de sesión</h2>
+<h3>Opción A: acceso con Google corporativo</h3>
+<ol>
+<li>Ingresa a la URL del sistema.</li>
+<li>Presiona <strong>Continuar con Google</strong>.</li>
+<li>Selecciona tu cuenta corporativa autorizada.</li>
+<li>Confirma el acceso.</li>
+</ol>
+<h3>Opción B: acceso con correo y contraseña</h3>
+<ol>
+<li>Ingresa a la URL del sistema.</li>
+<li>Escribe tu correo en el campo <strong>Correo</strong>.</li>
+<li>Escribe tu clave en <strong>Contraseña</strong>.</li>
+<li>Si lo necesitas, activa <strong>Mantener sesión iniciada</strong>.</li>
+<li>Presiona <strong>Entrar</strong>.</li>
+</ol>
+<h3>Recuperación de clave</h3>
+<p>Si tu organización habilitó restablecimiento de contraseña:</p>
+<ol>
+<li>Haz clic en <strong>¿Olvidaste tu contraseña?</strong></li>
+<li>Ingresa tu correo.</li>
+<li>Sigue el enlace recibido por email.</li>
+</ol>
+<h2>4. Estructura general del perfil</h2>
+<p>Cuando ingresas correctamente, verás:</p>
+<ul>
+<li>una barra lateral con la navegación principal</li>
+<li>una cabecera superior con tu nombre, correo y botón <strong>Salir</strong></li>
+<li>un área central de trabajo</li>
+<li>mensajes de confirmación o error cuando corresponda</li>
+</ul>
+<p>Las opciones disponibles en el menú lateral son:</p>
+<ul>
+<li><strong>Dashboard</strong></li>
+<li><strong>Calendario</strong></li>
+<li><strong>Reporte diario</strong></li>
+<li><strong>Reporte semanal</strong></li>
+<li><strong>Mi perfil</strong></li>
+</ul>
+<h2>5. Dashboard del proveedor</h2>
+<p>El dashboard entrega una visión rápida del estado operativo:</p>
+<ul>
+<li><strong>Días configurados</strong></li>
+<li><strong>Selecciones hoy</strong></li>
+<li><strong>Opciones visibles</strong></li>
+<li>acceso directo a la <strong>semana activa</strong></li>
+</ul>
+<p><img alt="Dashboard del proveedor" src="file:///C:/Users/Lenovo/Herd/menus/docs/manuals/screenshots/supplier-dashboard.png"/></p>
+<p><em>Figura 2. Dashboard principal del proveedor.</em></p>
+<h3>Qué revisar en el dashboard</h3>
+<ul>
+<li>si la semana activa corresponde a la que estás operando</li>
+<li>cuántos días ya están configurados</li>
+<li>si ya existen selecciones para el día actual</li>
+<li>si necesitas entrar al calendario para publicar o corregir información</li>
+</ul>
+<h2>6. Calendario operativo</h2>
+<p>El calendario es el centro principal de trabajo del proveedor.</p>
+<p><img alt="Calendario semanal del proveedor" src="file:///C:/Users/Lenovo/Herd/menus/docs/manuals/screenshots/supplier-calendar-week.png"/></p>
+<p><em>Figura 3. Calendario operativo en vista semanal.</em></p>
+<h3>6.1 Navegación del calendario</h3>
+<p>En la parte superior encontrarás:</p>
+<ul>
+<li><strong>Anterior</strong></li>
+<li><strong>Hoy</strong></li>
+<li><strong>Siguiente</strong></li>
+<li>selector de vista <strong>Mes / Semana / Día</strong></li>
+</ul>
+<p>Esto permite cambiar rápidamente el rango visible sin salir de la pantalla.</p>
+<h3>6.2 Cómo interpretar una celda del calendario</h3>
+<p>Cada día puede mostrar:</p>
+<ul>
+<li>número del día</li>
+<li>estado del día o de la semana</li>
+<li>título de la semana</li>
+<li>cantidad de alternativas configuradas</li>
+<li>indicación de si el día aún no está configurado</li>
+</ul>
+<h2>7. Gestión desde el drawer del día</h2>
+<p>Al hacer clic sobre un día, se abre un panel lateral a la derecha. Desde este panel puedes administrar la operación sin salir del calendario.</p>
+<p><img alt="Drawer de gestión del proveedor" src="file:///C:/Users/Lenovo/Herd/menus/docs/manuals/screenshots/supplier-calendar-drawer.png"/></p>
+<p><em>Figura 4. Drawer del proveedor para editar semana, día y alternativas.</em></p>
+<h2>8. Crear o editar una semana</h2>
+<p>En la sección <strong>Semana</strong> del drawer podrás:</p>
+<ul>
+<li>crear una nueva semana si aún no existe</li>
+<li>editar el título</li>
+<li>ajustar la fecha de inicio</li>
+<li>ajustar la fecha de término</li>
+<li>cambiar el estado</li>
+<li>agregar notas operativas</li>
+</ul>
+<h3>Campos importantes</h3>
+<ul>
+<li><strong>Título</strong>: nombre de referencia de la semana</li>
+<li><strong>Inicio de semana</strong>: fecha desde la cual se considera la semana</li>
+<li><strong>Fin de semana</strong>: fecha de cierre de la semana</li>
+<li><strong>Estado</strong>: controla el comportamiento global</li>
+<li><strong>Notas</strong>: información interna de apoyo</li>
+</ul>
+<h3>Estados de una semana</h3>
+<table>
+<thead>
+<tr>
+<th>Estado</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>draft</code></td>
+<td>Semana en preparación. El proveedor puede configurarla.</td>
+</tr>
+<tr>
+<td><code>published</code></td>
+<td>Semana visible para operación. Los días publicados quedan disponibles para trabajadores.</td>
+</tr>
+<tr>
+<td><code>closed</code></td>
+<td>Semana cerrada. Ya no debe modificarse ni aceptar cambios de selección.</td>
+</tr>
+</tbody>
+</table>
+<h2>9. Crear o editar un día</h2>
+<p>En la sección <strong>Día</strong> del drawer podrás:</p>
+<ul>
+<li>crear el menú del día si todavía no existe</li>
+<li>ajustar la fecha</li>
+<li>cambiar el estado del día</li>
+</ul>
+<h3>Estados de un día</h3>
+<table>
+<thead>
+<tr>
+<th>Estado</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>draft</code></td>
+<td>Día en preparación, no visible para selección.</td>
+</tr>
+<tr>
+<td><code>published</code></td>
+<td>Día disponible para trabajadores.</td>
+</tr>
+<tr>
+<td><code>closed</code></td>
+<td>Día bloqueado, visible solo como referencia histórica.</td>
+</tr>
+</tbody>
+</table>
+<h3>Recomendación operativa</h3>
+<p>Usa <code>draft</code> mientras todavía estés ajustando platos o cupos. Cambia a <code>published</code> solo cuando el día esté listo para que los trabajadores seleccionen.</p>
+<h2>10. Configurar alternativas de almuerzo</h2>
+<p>La sección <strong>Opciones configuradas</strong> permite administrar cada plato del día.</p>
+<h3>Cada alternativa puede incluir</h3>
+<ul>
+<li><strong>Nombre del plato</strong></li>
+<li><strong>Descripción</strong></li>
+<li><strong>Cupo</strong></li>
+<li><strong>Orden</strong></li>
+<li><strong>Visible para trabajadores</strong></li>
+<li><strong>Imagen</strong></li>
+</ul>
+<h3>Cómo crear una nueva alternativa</h3>
+<ol>
+<li>Abre el día correspondiente desde el calendario.</li>
+<li>Verifica que el día exista.</li>
+<li>Desplázate hasta <strong>Nueva alternativa</strong>.</li>
+<li>Completa nombre, descripción, cupo y orden.</li>
+<li>Sube una imagen si corresponde.</li>
+<li>Define si estará visible.</li>
+<li>Haz clic en <strong>Agregar alternativa</strong>.</li>
+</ol>
+<h3>Cómo editar una alternativa existente</h3>
+<ol>
+<li>Abre el día desde el calendario.</li>
+<li>Ubica la tarjeta de la alternativa.</li>
+<li>Modifica los campos necesarios.</li>
+<li>Presiona <strong>Guardar alternativa</strong>.</li>
+</ol>
+<h3>Recomendaciones sobre cupos</h3>
+<ul>
+<li>si dejas el cupo vacío, la opción se considera sin límite</li>
+<li>si defines cupo, el sistema lo va descontando automáticamente a medida que los trabajadores seleccionan</li>
+<li>si un trabajador cambia de opción, el cupo anterior se libera y el nuevo se descuenta</li>
+</ul>
+<h3>Uso del campo “Visible”</h3>
+<p>Si una alternativa está marcada como visible:</p>
+<ul>
+<li>aparece al trabajador cuando el día está publicado</li>
+</ul>
+<p>Si la alternativa está oculta:</p>
+<ul>
+<li>no aparece como opción de selección</li>
+<li>puede mantenerse internamente mientras ajustas la operación</li>
+</ul>
+<h2>11. Flujo recomendado de publicación</h2>
+<p>Para evitar errores operativos, se recomienda este flujo:</p>
+<ol>
+<li>Revisa la semana en el calendario.</li>
+<li>Configura los días necesarios.</li>
+<li>Crea todas las alternativas del día.</li>
+<li>Verifica cupos, visibilidad e imágenes.</li>
+<li>Publica el día cuando esté listo.</li>
+<li>Publica la semana si corresponde a tu proceso interno.</li>
+<li>Cierra la semana al terminar la operación.</li>
+</ol>
+<h2>12. Reporte diario</h2>
+<p>El <strong>Reporte diario</strong> resume la demanda exacta de un día particular.</p>
+<p><img alt="Reporte diario del proveedor" src="file:///C:/Users/Lenovo/Herd/menus/docs/manuals/screenshots/supplier-daily-report.png"/></p>
+<p><em>Figura 5. Reporte diario con total a confeccionar y detalle por alternativa.</em></p>
+<h3>Qué puedes hacer en este reporte</h3>
+<ul>
+<li>seleccionar una fecha específica</li>
+<li>revisar el total a confeccionar</li>
+<li>ver la cantidad por alternativa</li>
+<li>exportar el reporte a Excel</li>
+</ul>
+<h3>Cómo usarlo</h3>
+<ol>
+<li>Ve a <strong>Reporte diario</strong>.</li>
+<li>Selecciona la fecha en el campo <strong>Fecha</strong>.</li>
+<li>Revisa el total general.</li>
+<li>Baja a la tabla para ver el detalle por alternativa.</li>
+<li>Haz clic en <strong>Exportar Excel</strong> si necesitas compartir o respaldar la información.</li>
+</ol>
+<h2>13. Reporte semanal</h2>
+<p>El <strong>Reporte semanal</strong> permite analizar una semana completa y además revisar el detalle por día.</p>
+<p><img alt="Reporte semanal del proveedor" src="file:///C:/Users/Lenovo/Herd/menus/docs/manuals/screenshots/supplier-weekly-report.png"/></p>
+<p><em>Figura 6. Reporte semanal con selector de semana, resumen por día y exportación Excel.</em></p>
+<h3>Qué puedes hacer en este reporte</h3>
+<ul>
+<li>seleccionar una semana</li>
+<li>revisar el total semanal acumulado</li>
+<li>ver el detalle por cada día</li>
+<li>cambiar entre días desde los botones superiores</li>
+<li>exportar el consolidado a Excel</li>
+</ul>
+<h3>Cómo usarlo</h3>
+<ol>
+<li>Ve a <strong>Reporte semanal</strong>.</li>
+<li>Elige la semana en el selector <strong>Semana</strong>.</li>
+<li>Revisa el total semanal.</li>
+<li>Haz clic en un día específico para ver el detalle de ese día.</li>
+<li>Usa <strong>Exportar Excel</strong> para descargar un archivo <code>.xlsx</code>.</li>
+</ol>
+<h3>Qué incluye la exportación semanal</h3>
+<p>La exportación semanal genera:</p>
+<ul>
+<li>una hoja resumen de la semana</li>
+<li>una hoja por cada día configurado</li>
+<li>alternativas y cantidades seleccionadas separadas por día</li>
+</ul>
+<h2>14. Exportación a Excel</h2>
+<p>La plataforma genera archivos Excel nativos en formato <code>.xlsx</code>.</p>
+<h3>Reporte diario</h3>
+<p>Incluye:</p>
+<ul>
+<li>fecha consultada</li>
+<li>semana asociada</li>
+<li>total de selecciones</li>
+<li>detalle por alternativa</li>
+</ul>
+<h3>Reporte semanal</h3>
+<p>Incluye:</p>
+<ul>
+<li>resumen general de la semana</li>
+<li>total por día</li>
+<li>detalle por alternativa en hojas separadas por día</li>
+</ul>
+<h3>Recomendaciones al exportar</h3>
+<ul>
+<li>espera la descarga completa antes de cerrar la pestaña</li>
+<li>valida que la fecha o semana seleccionada sea la correcta antes de exportar</li>
+<li>usa el archivo exportado para cocina, planificación o control interno</li>
+</ul>
+<h2>15. Mi perfil</h2>
+<p>Desde <strong>Mi perfil</strong> puedes:</p>
+<ul>
+<li>actualizar tus datos personales</li>
+<li>cambiar tu contraseña</li>
+<li>revisar la configuración básica de tu cuenta</li>
+</ul>
+<h2>16. Cerrar sesión</h2>
+<p>Para salir del sistema:</p>
+<ol>
+<li>Haz clic en <strong>Salir</strong> en la parte superior derecha.</li>
+<li>Verifica que vuelves a la pantalla de acceso.</li>
+</ol>
+<h2>17. Buenas prácticas operativas</h2>
+<ul>
+<li>configura las semanas con anticipación</li>
+<li>publica solo días completos y revisados</li>
+<li>mantén imágenes y nombres claros para evitar errores de selección</li>
+<li>usa los reportes antes de cerrar la preparación del día</li>
+<li>cierra semanas históricas para evitar modificaciones accidentales</li>
+</ul>
+<h2>18. Solución de problemas</h2>
+<h3>No veo una alternativa en el calendario del trabajador</h3>
+<p>Revisa:</p>
+<ul>
+<li>que el día esté en <code>published</code></li>
+<li>que la alternativa esté marcada como visible</li>
+<li>que la semana no esté cerrada</li>
+</ul>
+<h3>El trabajador no puede cambiar su selección</h3>
+<p>Revisa:</p>
+<ul>
+<li>si el día o la semana están cerrados</li>
+<li>si la alternativa elegida tiene cupo disponible</li>
+</ul>
+<h3>El reporte no muestra datos</h3>
+<p>Revisa:</p>
+<ul>
+<li>la fecha seleccionada</li>
+<li>que existan selecciones registradas</li>
+<li>que estés consultando la semana correcta</li>
+</ul>
+<h2>19. Resumen</h2>
+<p>El perfil <strong>Proveedor</strong> concentra toda la operación:</p>
+<ul>
+<li>planificar semanas</li>
+<li>publicar días</li>
+<li>administrar alternativas</li>
+<li>controlar cupos</li>
+<li>revisar reportes</li>
+<li>exportar Excel para operación y control</li>
+</ul>
+<p>Si el equipo sigue el flujo recomendado, la plataforma permite mantener una operación más ordenada, rápida y trazable.</p>
+      </article>
+    </main>
+  </body>
+</html>

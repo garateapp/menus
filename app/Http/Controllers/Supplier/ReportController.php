@@ -7,9 +7,9 @@ use App\Services\Reports\DailyReportService;
 use App\Services\Reports\ReportExportService;
 use App\Services\Reports\WeeklyReportService;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response as HttpResponse;
 use Inertia\Inertia;
 use Inertia\Response;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ReportController extends Controller
 {
@@ -43,36 +43,20 @@ class ReportController extends Controller
         Request $request,
         DailyReportService $dailyReportService,
         ReportExportService $reportExportService,
-    ): HttpResponse {
+    ): BinaryFileResponse {
         $selectedDate = $request->query('date') ?: today()->toDateString();
         $report = $dailyReportService->buildForSupplier($request->user(), $selectedDate);
 
         abort_unless($report, 404);
 
-        return $reportExportService->excelResponse(
-            'reporte-diario-'.$report['date'],
-            'Reporte diario '.$report['date'],
-            [[
-                'title' => $report['weekTitle'],
-                'description' => 'Total a confeccionar: '.$report['totalSelections'],
-                'headers' => ['Fecha', 'Alternativa', 'Descripción', 'Cantidad seleccionada'],
-                'rows' => collect($report['options'])
-                    ->map(fn ($option) => [
-                        $report['date'],
-                        $option['title'],
-                        $option['description'] ?: 'Sin descripción',
-                        $option['totalSelections'],
-                    ])
-                    ->all(),
-            ]]
-        );
+        return $reportExportService->downloadDailyReport($report);
     }
 
     public function exportWeekly(
         Request $request,
         WeeklyReportService $weeklyReportService,
         ReportExportService $reportExportService,
-    ): HttpResponse {
+    ): BinaryFileResponse {
         $report = $weeklyReportService->buildForSupplier(
             $request->user(),
             $request->query('weekly_menu_id'),
@@ -81,32 +65,6 @@ class ReportController extends Controller
 
         abort_unless($report, 404);
 
-        $sections = collect($report['days'])->map(function (array $day) {
-            $rows = collect($day['options'] ?? [])
-                ->map(fn ($option) => [
-                    $day['menuDate'],
-                    $option['title'],
-                    $option['description'] ?: 'Sin descripción',
-                    $option['totalSelections'],
-                ])
-                ->all();
-
-            if ($rows === []) {
-                $rows[] = [$day['menuDate'], 'Sin alternativas', '', 0];
-            }
-
-            return [
-                'title' => 'Día '.($day['menuDate']),
-                'description' => 'Estado: '.$day['status'].' | Total selecciones: '.$day['totalSelections'],
-                'headers' => ['Fecha', 'Menú', 'Descripción', 'Cantidad seleccionada'],
-                'rows' => $rows,
-            ];
-        })->all();
-
-        return $reportExportService->excelResponse(
-            'reporte-semanal-'.$report['weeklyMenuId'],
-            'Reporte semanal '.$report['title'],
-            $sections
-        );
+        return $reportExportService->downloadWeeklyReport($report);
     }
 }

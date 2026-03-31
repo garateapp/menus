@@ -47,3 +47,23 @@ export function formatDateInputValue(value?: string | null): string {
 
   return `${year}-${month}-${day}`;
 }
+
+export function formatDisplayDateTime(value?: string | null): string {
+  if (!value) {
+    return '-';
+  }
+
+  const parsed = new Date(value);
+
+  if (Number.isNaN(parsed.getTime())) {
+    return value;
+  }
+
+  const day = `${parsed.getDate()}`.padStart(2, '0');
+  const month = `${parsed.getMonth() + 1}`.padStart(2, '0');
+  const year = parsed.getFullYear();
+  const hours = `${parsed.getHours()}`.padStart(2, '0');
+  const minutes = `${parsed.getMinutes()}`.padStart(2, '0');
+
+  return `${day}-${month}-${year} ${hours}:${minutes}`;
+}

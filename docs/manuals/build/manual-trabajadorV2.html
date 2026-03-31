@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Manual de Usuario: Trabajador V2</title>
+    <style>@page {
+  size: A4;
+  margin: 18mm 16mm 18mm 16mm;
+}
+
+:root {
+  color-scheme: light;
+  --ink: #163028;
+  --muted: #55766b;
+  --border: #d9e7df;
+  --surface: #f6fbf8;
+  --accent: #1f9d74;
+  --accent-soft: #e4f6ee;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #eef5f1;
+  color: var(--ink);
+  font-family: "Segoe UI", Arial, sans-serif;
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+article {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 28px 34px;
+  box-shadow: 0 18px 40px -28px rgba(21, 49, 41, 0.28);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: #10271f;
+  line-height: 1.2;
+  page-break-after: avoid;
+}
+
+h1 {
+  margin: 0 0 14px;
+  font-size: 28px;
+}
+
+h2 {
+  margin-top: 28px;
+  margin-bottom: 10px;
+  padding-top: 6px;
+  border-top: 1px solid var(--border);
+  font-size: 20px;
+}
+
+h3 {
+  margin-top: 22px;
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+p,
+ul,
+ol,
+table,
+blockquote,
+figure {
+  margin-top: 0;
+  margin-bottom: 14px;
+}
+
+ul,
+ol {
+  padding-left: 20px;
+}
+
+li + li {
+  margin-top: 4px;
+}
+
+blockquote {
+  margin-left: 0;
+  padding: 14px 16px;
+  border-left: 4px solid var(--accent);
+  background: var(--accent-soft);
+  border-radius: 12px;
+  color: var(--ink);
+}
+
+img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 12px auto 6px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: 0 20px 44px -30px rgba(10, 35, 28, 0.26);
+  page-break-inside: avoid;
+}
+
+em {
+  color: var(--muted);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  page-break-inside: avoid;
+}
+
+th,
+td {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  vertical-align: top;
+  text-align: left;
+}
+
+th {
+  background: var(--surface);
+  font-weight: 700;
+}
+
+code {
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: var(--surface);
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 11px;
+}
+
+.meta {
+  margin-bottom: 24px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: linear-gradient(135deg, #fbfefd 0%, var(--surface) 100%);
+  color: var(--muted);
+}
+
+.meta strong {
+  color: var(--ink);
+}
+</style>
+  </head>
+  <body>
+    <main>
+      <article>
+        <div class="meta">
+          <strong>Manual de Usuario: Trabajador V2</strong><br />
+          Documento generado automáticamente desde Markdown el 31-03-2026 09:04.
+        </div>
+        <h1>Manual de Usuario: Trabajador</h1>
+<blockquote>
+<p>Este manual explica cómo acceder a la plataforma <strong>Menú</strong> y usar el perfil <strong>Trabajador</strong> para revisar el calendario, escoger una alternativa diaria y consultar el historial de selecciones.<br/>
+Las capturas fueron tomadas en un ambiente de ejemplo; algunos nombres, fechas o cantidades pueden variar en producción.</p>
+</blockquote>
+<p><img alt="Pantalla de acceso al sistema" src="file:///C:/Users/Lenovo/Herd/menus/docs/manuals/screenshots/login.png"/></p>
+<p><em>Figura 1. Pantalla de acceso a Menú.</em></p>
+<h2>1. Objetivo del perfil Trabajador</h2>
+<p>El perfil <strong>Trabajador</strong> te permite:</p>
+<ul>
+<li>ingresar al sistema con tu cuenta autorizada</li>
+<li>revisar el menú publicado por fecha</li>
+<li>cambiar entre vista mensual, semanal o diaria</li>
+<li>abrir el detalle de un día sin salir del calendario</li>
+<li>seleccionar una alternativa de almuerzo</li>
+<li>modificar tu selección mientras el período siga abierto</li>
+<li>consultar tu historial de elecciones</li>
+</ul>
+<h2>2. Qué necesitas para ingresar</h2>
+<p>Para acceder al sistema necesitas:</p>
+<ul>
+<li>la URL oficial entregada por la empresa</li>
+<li>un usuario activo con rol <strong>Trabajador</strong></li>
+<li>acceso con Google corporativo o con correo y contraseña</li>
+</ul>
+<h2>3. Inicio de sesión</h2>
+<h3>Opción A: ingreso con Google corporativo</h3>
+<ol>
+<li>Ingresa a la URL del sistema https://menus.appgreenex.cl.</li>
+<li>Haz clic en <strong>Continuar con Google</strong>.</li>
+<li>Elige tu cuenta corporativa autorizada.</li>
+<li>Confirma el acceso.</li>
+</ol>
+<h3>Opción B: ingreso con correo y contraseña</h3>
+<ol>
+<li>Ingresa a la URL del sistema https://menus.appgreenex.cl. </li>
+<li>Escribe tu correo en <strong>Correo</strong>.</li>
+<li>Escribe tu clave en <strong>Contraseña</strong>.</li>
+<li>Si quieres, marca <strong>Mantener sesión iniciada</strong>.</li>
+<li>Presiona <strong>Entrar</strong>.</li>
+</ol>
+<p>Para revisar un menú:</p>
+<ol>
+<li>Haz clic en Calendario y despues click sobre el día que quieres consultar.</li>
+<li>Se abrirá un panel lateral a la derecha.</li>
+<li>En ese panel podrás ver el detalle del menú.</li>
+</ol>
+<p><img alt="Drawer del trabajador para seleccionar menú" src="file:///C:/Users/Lenovo/Herd/menus/docs/manuals/screenshots/worker-calendar-drawer.png"/></p>
+<p><em>Figura 4. Drawer del trabajador con alternativas disponibles y selección actual.</em></p>
+<h2>4. Seleccionar una alternativa</h2>
+<p>Dentro del menú verás:</p>
+<ul>
+<li>el estado del día</li>
+<li>tu selección actual, si ya existe</li>
+<li>la lista de alternativas disponibles</li>
+<li>imagen y descripción del plato</li>
+<li>cupos disponibles</li>
+<li>botón para elegir o cambiar tu opción</li>
+</ul>
+<h3>Cómo seleccionar un menú por primera vez</h3>
+<ol>
+<li>Abre el día desde el calendario.</li>
+<li>Revisa las alternativas visibles.</li>
+<li>Busca el plato que deseas.</li>
+<li>Haz clic en <strong>Elegir opción</strong>.</li>
+<li>Espera la confirmación visual.</li>
+</ol>
+<h3>Qué ocurre después</h3>
+<ul>
+<li>la alternativa quedará marcada como <strong>Tu selección</strong></li>
+<li>el sistema registrará la fecha y hora de la elección</li>
+<li>si la alternativa tiene cupos limitados, estos se descontarán automáticamente</li>
+</ul>
+<h2>5. Cambiar una selección ya hecha</h2>
+<p>Si el día o la semana aún no están cerrados, puedes cambiar tu elección:</p>
+<ol>
+<li>Vuelve a abrir el día desde el calendario.</li>
+<li>Ubica la nueva alternativa.</li>
+<li>Haz clic en <strong>Cambiar selección</strong> o en el botón equivalente.</li>
+<li>Confirma el cambio con la respuesta visual del sistema.</li>
+</ol>
+<h3>Reglas importantes</h3>
+<ul>
+<li>solo puedes tener <strong>una alternativa por fecha</strong></li>
+<li>si cambias de opción, la anterior se libera y la nueva queda reservada</li>
+<li>no puedes cambiar si el día o la semana están cerrados</li>
+<li>no puedes elegir opciones ocultas o agotadas</li>
+</ul>
+<h2>6. Buenas prácticas de uso</h2>
+<ul>
+<li>revisa el calendario con anticipación</li>
+<li>confirma tu opción apenas el día esté publicado</li>
+<li>si vas a cambiar tu elección, hazlo antes del cierre</li>
+<li>verifica siempre que la alternativa quede marcada como seleccionada</li>
+</ul>
+<h2>7. Solución de problemas</h2>
+<h3>No veo el menú de un día</h3>
+<p>Puede deberse a que:</p>
+<ul>
+<li>el proveedor aún no lo publica</li>
+<li>el día está en borrador</li>
+<li>no existe menú para esa fecha</li>
+</ul>
+<h3>No puedo cambiar mi selección</h3>
+<p>Revisa si:</p>
+<ul>
+<li>la semana está cerrada</li>
+<li>el día está cerrado</li>
+<li>la nueva alternativa ya no tiene cupos</li>
+</ul>
+<h3>Mi alternativa no aparece</h3>
+<p>Puede ser que:</p>
+<ul>
+<li>la opción fue ocultada por el proveedor</li>
+<li>la alternativa ya no está disponible para ese día</li>
+</ul>
+<h3>No recuerdo lo que seleccioné</h3>
+<p>Revisa la sección <strong>Mis selecciones</strong> o abre el día en el calendario para ver tu selección actual.</p>
+<h2>8. Resumen</h2>
+<p>El perfil <strong>Trabajador</strong> está diseñado para operar de forma rápida:</p>
+<ul>
+<li>ingresar al sistema</li>
+<li>revisar el calendario</li>
+<li>abrir el detalle del día</li>
+<li>elegir una alternativa</li>
+<li>modificarla si el período sigue abierto</li>
+<li>consultar el historial cuando lo necesites</li>
+</ul>
+<p>Si revisas el calendario con frecuencia, podrás seleccionar a tiempo y evitar quedarte sin cupo en opciones limitadas.</p>
+      </article>
+    </main>
+  </body>
+</html>
