@@ -5,6 +5,7 @@ namespace App\Services\Reports;
 use App\Models\DailyMenu;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Spatie\Permission\Models\Role;
 
 class DailyReportService
 {
@@ -78,12 +79,40 @@ class DailyReportService
             ])
             ->all();
 
+        $selectedUserIds = $dailyMenu->selections
+            ->pluck('user_id')
+            ->filter()
+            ->unique()
+            ->all();
+
+        $workerRoleExists = Role::query()
+            ->where('name', 'Worker')
+            ->where('guard_name', 'web')
+            ->exists();
+
+        $noResponses = $workerRoleExists
+            ? User::query()
+                ->role('Worker')
+                ->where('is_active', true)
+                ->when($selectedUserIds !== [], fn (Builder $builder) => $builder->whereNotIn('id', $selectedUserIds))
+                ->orderBy('name')
+                ->get(['id', 'name', 'email', 'username'])
+                ->map(fn (User $user) => [
+                    'id' => $user->id,
+                    'userName' => $user->name,
+                    'userEmail' => $user->email,
+                    'username' => $user->username,
+                ])
+                ->all()
+            : [];
+
         return [
             'date' => $dailyMenu->menu_date?->toDateString(),
             'weekTitle' => $dailyMenu->weeklyMenu->title,
             'totalSelections' => count($selections),
             'options' => $options,
             'selections' => $selections,
+            'noResponses' => $noResponses,
         ];
     }
 

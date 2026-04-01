@@ -16,12 +16,20 @@ type DailySelection = {
   selectedAt?: string | null;
 };
 
+type DailyNoResponse = {
+  id: number;
+  userName?: string | null;
+  userEmail?: string | null;
+  username?: string | null;
+};
+
 type DailyReport = {
   date: string;
   weekTitle: string;
   totalSelections: number;
   options: { id: number; title: string; description?: string; totalSelections: number }[];
   selections: DailySelection[];
+  noResponses: DailyNoResponse[];
 } | null;
 
 type Props = {
@@ -112,6 +120,25 @@ export default function Index({ summary, selectedDate, availableDates, dailyRepo
               { key: 'username', header: 'Username', render: (row) => row.username || '-' },
               { key: 'optionTitle', header: 'Menú elegido', render: (row) => row.optionTitle || 'Sin alternativa' },
               { key: 'selectedAt', header: 'Registrado', render: (row) => formatDisplayDateTime(row.selectedAt) },
+            ]}
+          />
+
+          <div className="panel-card">
+            <div className="card-body">
+              <h2 className="card-title">Trabajadores sin respuesta</h2>
+              <p className="text-sm text-base-content/60">
+                Nómina de trabajadores activos que aún no registran una elección para la fecha seleccionada.
+              </p>
+            </div>
+          </div>
+
+          <DataTable
+            rows={dailyReport.noResponses}
+            columns={[
+              { key: 'userName', header: 'Usuario', render: (row) => row.userName || 'Sin nombre' },
+              { key: 'userEmail', header: 'Correo', render: (row) => row.userEmail || 'Sin correo' },
+              { key: 'username', header: 'Username', render: (row) => row.username || '-' },
+              { key: 'status', header: 'Estado', render: () => 'Sin respuesta' },
             ]}
           />
         </div>

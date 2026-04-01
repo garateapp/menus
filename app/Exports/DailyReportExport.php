@@ -48,9 +48,24 @@ class DailyReportExport implements WithMultipleSheets
             ];
         }
 
+        $noResponseRows = [
+            ['Fecha', 'Usuario', 'Correo', 'Username', 'Estado'],
+        ];
+
+        foreach ($this->report['noResponses'] ?? [] as $user) {
+            $noResponseRows[] = [
+                $this->report['date'],
+                $user['userName'] ?: 'Sin nombre',
+                $user['userEmail'] ?: 'Sin correo',
+                $user['username'] ?: '-',
+                'Sin respuesta',
+            ];
+        }
+
         return [
             new ArraySheetExport('Reporte diario', $summaryRows),
             new ArraySheetExport('Entregas', $deliveryRows),
+            new ArraySheetExport('No respondidos', $noResponseRows),
         ];
     }
 }

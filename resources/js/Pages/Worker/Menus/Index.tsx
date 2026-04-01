@@ -1,5 +1,6 @@
 import CalendarDrawer from '@/Components/calendar/CalendarDrawer';
 import CalendarToolbar from '@/Components/calendar/CalendarToolbar';
+import MenuOptOutSwitch from '@/Components/MenuOptOutSwitch';
 import MenuOptionCard from '@/Components/MenuOptionCard';
 import PageHeader from '@/Components/PageHeader';
 import StatusBadge from '@/Components/StatusBadge';
@@ -72,6 +73,8 @@ export default function Index({ calendar, selectedDate, selectedMenu }: Props) {
   const closeHref = buildWorkerCalendarHref(calendar);
   const currentSelection = (selectedMenu?.selections?.[0] ?? null) as MenuSelection | null;
   const options = selectedMenu?.menu_options ?? selectedMenu?.menuOptions ?? [];
+  const optOutOption = options.find((option) => option.is_opt_out);
+  const regularOptions = options.filter((option) => !option.is_opt_out);
 
   return (
     <AppLayout>
@@ -108,7 +111,7 @@ export default function Index({ calendar, selectedDate, selectedMenu }: Props) {
                   <div className="mt-2 flex flex-wrap items-center gap-3">
                     <StatusBadge status={selectedMenu.status} />
                     <span className="text-sm text-base-content/62">
-                      {options.length} alternativas disponibles
+                      {regularOptions.length} alternativas disponibles
                     </span>
                   </div>
                 </div>
@@ -122,7 +125,16 @@ export default function Index({ calendar, selectedDate, selectedMenu }: Props) {
             </div>
 
             <div className="grid gap-5">
-              {options.map((option) => (
+              {optOutOption ? (
+                <MenuOptOutSwitch
+                  dailyMenuId={selectedMenu.id}
+                  option={optOutOption}
+                  selected={currentSelection?.menu_option_id === optOutOption.id}
+                  disabled={selectedMenu.status === 'closed'}
+                />
+              ) : null}
+
+              {regularOptions.map((option) => (
                 <MenuOptionCard
                   key={option.id}
                   dailyMenuId={selectedMenu.id}

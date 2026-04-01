@@ -24,7 +24,11 @@ class MenuController extends Controller
             ->whereHas('weeklyMenu', fn ($query) => $query->where('status', '!=', MenuStatus::Closed))
             ->with([
                 'weeklyMenu',
-                'menuOptions' => fn ($query) => $query->where('is_visible', true)->withCount('selections'),
+                'menuOptions' => fn ($query) => $query
+                    ->where('is_visible', true)
+                    ->withCount('selections')
+                    ->orderByDesc('is_opt_out')
+                    ->orderBy('sort_order'),
                 'selections' => fn ($query) => $query->where('user_id', $user->id)->with('menuOption'),
             ])
             ->orderBy('menu_date')
@@ -53,6 +57,7 @@ class MenuController extends Controller
             'menuOptions' => fn ($query) => $query
                 ->where('is_visible', true)
                 ->withCount('selections')
+                ->orderByDesc('is_opt_out')
                 ->orderBy('sort_order'),
             'selections' => fn ($query) => $query->where('user_id', $user->id)->with('menuOption'),
         ]);
@@ -75,7 +80,7 @@ class MenuController extends Controller
                 'has_day' => (bool) $menu,
                 'daily_menu_id' => $menu?->id,
                 'status' => $menu?->status?->value,
-                'options_count' => $menu ? $menu->menuOptions->count() : 0,
+                'options_count' => $menu ? $menu->menuOptions->where('is_opt_out', false)->count() : 0,
                 'has_selection' => (bool) $selection,
                 'selection_title' => $selection?->menuOption?->title,
                 'can_interact' => $menu?->status === MenuStatus::Published,

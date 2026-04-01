@@ -30,7 +30,7 @@ export default function WorkerDashboard({ todayMenu, upcomingMenus, recentSelect
             <h2 className="card-title">Menús próximos</h2>
             <div className="space-y-3">
               {upcomingMenus.map((menu) => {
-                const options = menu.menu_options ?? menu.menuOptions ?? [];
+                const options = (menu.menu_options ?? menu.menuOptions ?? []).filter((option) => !option.is_opt_out);
                 const menuDate = menu.menu_date;
 
                 return (

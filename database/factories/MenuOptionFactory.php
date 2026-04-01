@@ -28,6 +28,7 @@ class MenuOptionFactory extends Factory
             'image_path' => null,
             'quota' => fake()->optional()->numberBetween(20, 80),
             'is_visible' => true,
+            'is_opt_out' => false,
             'sort_order' => 0,
         ];
     }

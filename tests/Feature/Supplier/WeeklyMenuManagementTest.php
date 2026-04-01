@@ -313,6 +313,12 @@ class WeeklyMenuManagementTest extends TestCase
             'daily_menu_id' => $dailyMenu->id,
             'title' => 'Pescado con pure',
         ]);
+        $this->assertDatabaseHas('menu_options', [
+            'daily_menu_id' => $dailyMenu->id,
+            'title' => 'No solicitaré menú',
+            'is_opt_out' => true,
+            'is_visible' => true,
+        ]);
     }
 
     public function test_supplier_can_update_menu_options_inside_their_day(): void

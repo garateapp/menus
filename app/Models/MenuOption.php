@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\Menus\OptOutMenuOptionService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -23,6 +24,7 @@ class MenuOption extends Model
         'image_path',
         'quota',
         'is_visible',
+        'is_opt_out',
         'sort_order',
     ];
 
@@ -30,8 +32,20 @@ class MenuOption extends Model
     {
         return [
             'is_visible' => 'boolean',
+            'is_opt_out' => 'boolean',
             'quota' => 'integer',
         ];
+    }
+
+    protected static function booted(): void
+    {
+        static::created(function (MenuOption $menuOption) {
+            if ($menuOption->is_opt_out) {
+                return;
+            }
+
+            app(OptOutMenuOptionService::class)->ensureForDailyMenu($menuOption->daily_menu_id);
+        });
     }
 
     public function dailyMenu(): BelongsTo

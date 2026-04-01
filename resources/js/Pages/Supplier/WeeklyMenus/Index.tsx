@@ -373,7 +373,9 @@ export default function Index({
 }: Props) {
   const closeHref = buildSupplierCalendarHref(calendar);
   const redirectTo = buildSupplierCalendarHref(calendar, selectedDate);
-  const selectedOptions = selectedDailyMenu?.menu_options ?? selectedDailyMenu?.menuOptions ?? [];
+  const allSelectedOptions = selectedDailyMenu?.menu_options ?? selectedDailyMenu?.menuOptions ?? [];
+  const selectedOptions = allSelectedOptions.filter((option) => !option.is_opt_out);
+  const hasSystemOptOut = allSelectedOptions.some((option) => option.is_opt_out);
 
   return (
     <AppLayout>
@@ -418,6 +420,11 @@ export default function Index({
                       <div>
                         <p className="section-kicker">Alternativas</p>
                         <h3 className="mt-2 text-xl font-semibold">Opciones configuradas</h3>
+                        {hasSystemOptOut ? (
+                          <p className="mt-2 text-sm text-base-content/60">
+                            La opción <strong>No solicitaré menú</strong> se agrega automáticamente para los trabajadores y no se edita desde este panel.
+                          </p>
+                        ) : null}
                       </div>
                       <span className="badge badge-outline">{selectedOptions.length} registradas</span>
                     </div>

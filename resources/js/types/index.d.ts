@@ -53,6 +53,7 @@ export interface MenuOption {
   remaining_quota?: number | null;
   is_sold_out?: boolean;
   is_visible: boolean;
+  is_opt_out?: boolean;
   sort_order: number;
   totalSelections?: number;
   selections_count?: number;

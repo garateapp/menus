@@ -190,6 +190,7 @@ class MenuSelectionTest extends TestCase
     {
         $worker = $this->createWorker();
         [$dailyMenu] = $this->createPublishedMenuScenario(weekStatus: MenuStatus::Draft);
+        $expectedIndex = now()->startOfWeek()->diffInDays($dailyMenu->menu_date);
 
         $response = $this->actingAs($worker)->get(route('worker.menus.index', [
             'view' => 'week',
@@ -198,11 +199,49 @@ class MenuSelectionTest extends TestCase
 
         $response->assertInertia(fn ($page) => $page
             ->component('Worker/Menus/Index')
-            ->where('calendar.cells.0.date', $dailyMenu->menu_date->toDateString())
-            ->where('calendar.cells.0.has_day', true)
-            ->where('calendar.cells.0.status', MenuStatus::Published->value)
-            ->where('calendar.cells.0.options_count', 1)
+            ->where("calendar.cells.$expectedIndex.date", $dailyMenu->menu_date->toDateString())
+            ->where("calendar.cells.$expectedIndex.has_day", true)
+            ->where("calendar.cells.$expectedIndex.status", MenuStatus::Published->value)
+            ->where("calendar.cells.$expectedIndex.options_count", 1)
         );
+    }
+
+    public function test_worker_sees_the_opt_out_option_when_a_day_has_menu_alternatives(): void
+    {
+        $worker = $this->createWorker();
+        [$dailyMenu, $menuOption] = $this->createPublishedMenuScenario();
+
+        $response = $this->actingAs($worker)->get(route('worker.menus.show', $dailyMenu));
+
+        $response->assertInertia(fn ($page) => $page
+            ->component('Worker/Menus/Show')
+            ->has('menu.menu_options', 2)
+            ->where('menu.menu_options.0.is_opt_out', true)
+            ->where('menu.menu_options.0.title', 'No solicitaré menú')
+            ->where('menu.menu_options.1.title', $menuOption->title)
+        );
+    }
+
+    public function test_worker_can_select_the_opt_out_option_as_a_normal_selection(): void
+    {
+        $worker = $this->createWorker();
+        [$dailyMenu] = $this->createPublishedMenuScenario();
+
+        $optOutOption = MenuOption::query()
+            ->where('daily_menu_id', $dailyMenu->id)
+            ->where('is_opt_out', true)
+            ->firstOrFail();
+
+        $response = $this->actingAs($worker)->post(route('worker.selections.store', $dailyMenu), [
+            'menu_option_id' => $optOutOption->id,
+        ]);
+
+        $response->assertRedirect();
+        $this->assertDatabaseHas('menu_selections', [
+            'user_id' => $worker->id,
+            'daily_menu_id' => $dailyMenu->id,
+            'menu_option_id' => $optOutOption->id,
+        ]);
     }
 
     private function createWorker(): User

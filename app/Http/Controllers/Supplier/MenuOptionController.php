@@ -8,6 +8,7 @@ use App\Models\DailyMenu;
 use App\Models\MenuOption;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Support\Facades\Storage;
 
 class MenuOptionController extends Controller
@@ -36,6 +37,8 @@ class MenuOptionController extends Controller
     public function update(StoreMenuOptionRequest $request, MenuOption $menuOption): RedirectResponse
     {
         $this->authorize('update', $menuOption->dailyMenu->weeklyMenu);
+
+        abort_if($menuOption->is_opt_out, HttpResponse::HTTP_FORBIDDEN, 'La opción del sistema no se puede editar manualmente.');
 
         $imagePath = $menuOption->image_path;
 

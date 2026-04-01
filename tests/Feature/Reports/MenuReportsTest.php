@@ -39,6 +39,8 @@ class MenuReportsTest extends TestCase
             'selected_at' => now(),
         ]);
 
+        $this->createWorker(['name' => 'Pedro Sin Selección']);
+
         $response = $this->actingAs($supplier)->get(route('supplier.reports.daily', [
             'date' => $dailyMenu->menu_date->toDateString(),
         ]));
@@ -46,10 +48,12 @@ class MenuReportsTest extends TestCase
         $response->assertInertia(fn (Assert $page) => $page
             ->component('Supplier/Reports/Daily')
             ->where('report.totalSelections', 2)
-            ->has('report.options', 2)
+            ->has('report.options', 3)
             ->has('report.selections', 2)
             ->where('report.selections.0.userName', 'Juan Pérez')
             ->where('report.selections.0.optionTitle', 'Pollo')
+            ->has('report.noResponses', 1)
+            ->where('report.noResponses.0.userName', 'Pedro Sin Selección')
         );
     }
 
@@ -177,7 +181,7 @@ class MenuReportsTest extends TestCase
             ->where('selectedDay', $secondDay->menu_date->toDateString())
             ->where('report.selectedDay.date', $secondDay->menu_date->toDateString())
             ->where('report.selectedDay.totalSelections', 1)
-            ->has('report.selectedDay.options', 1)
+            ->has('report.selectedDay.options', 2)
         );
     }
 
@@ -254,6 +258,8 @@ class MenuReportsTest extends TestCase
             'selected_at' => now(),
         ]);
 
+        $this->createWorker(['name' => 'Pendiente Reporte']);
+
         $superAdmin = $this->createSuperAdmin();
 
         $response = $this->actingAs($superAdmin)->get(route('superadmin.reports.index', [
@@ -267,6 +273,8 @@ class MenuReportsTest extends TestCase
             ->has('dailyReport.selections', 1)
             ->where('dailyReport.selections.0.userName', 'Trabajador Control')
             ->where('dailyReport.selections.0.optionTitle', 'Pollo')
+            ->has('dailyReport.noResponses', 1)
+            ->where('dailyReport.noResponses.0.userName', 'Pendiente Reporte')
         );
     }
 

@@ -19,7 +19,11 @@ class DashboardController extends Controller
             ->where('status', MenuStatus::Published)
             ->whereHas('weeklyMenu', fn ($query) => $query->where('status', '!=', MenuStatus::Closed))
             ->with([
-                'menuOptions' => fn ($query) => $query->where('is_visible', true)->withCount('selections'),
+                'menuOptions' => fn ($query) => $query
+                    ->where('is_visible', true)
+                    ->withCount('selections')
+                    ->orderByDesc('is_opt_out')
+                    ->orderBy('sort_order'),
                 'selections' => fn ($query) => $query->where('user_id', $user->id),
             ])
             ->first();
@@ -28,7 +32,10 @@ class DashboardController extends Controller
             ->whereDate('menu_date', '>=', today())
             ->where('status', MenuStatus::Published)
             ->whereHas('weeklyMenu', fn ($query) => $query->where('status', '!=', MenuStatus::Closed))
-            ->with(['weeklyMenu', 'menuOptions' => fn ($query) => $query->where('is_visible', true)])
+            ->with(['weeklyMenu', 'menuOptions' => fn ($query) => $query
+                ->where('is_visible', true)
+                ->orderByDesc('is_opt_out')
+                ->orderBy('sort_order')])
             ->orderBy('menu_date')
             ->limit(5)
             ->get();

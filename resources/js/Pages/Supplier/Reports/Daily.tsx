@@ -22,6 +22,12 @@ type Props = {
       optionTitle?: string | null;
       selectedAt?: string | null;
     }[];
+    noResponses: {
+      id: number;
+      userName?: string | null;
+      userEmail?: string | null;
+      username?: string | null;
+    }[];
   } | null;
 };
 
@@ -105,6 +111,25 @@ export default function Daily({ selectedDate, availableDates, report }: Props) {
                 { key: 'username', header: 'Username', render: (row) => row.username || '-' },
                 { key: 'optionTitle', header: 'Menú elegido', render: (row) => row.optionTitle || 'Sin alternativa' },
                 { key: 'selectedAt', header: 'Registrado', render: (row) => formatDisplayDateTime(row.selectedAt) },
+              ]}
+            />
+          </div>
+          <div className="mt-8 space-y-4">
+            <div className="panel-card">
+              <div className="card-body">
+                <h2 className="card-title">Trabajadores sin respuesta</h2>
+                <p className="text-sm text-base-content/60">
+                  Este bloque lista a los trabajadores activos que todavía no han realizado ninguna selección para el día.
+                </p>
+              </div>
+            </div>
+            <DataTable
+              rows={report.noResponses}
+              columns={[
+                { key: 'userName', header: 'Usuario', render: (row) => row.userName || 'Sin nombre' },
+                { key: 'userEmail', header: 'Correo', render: (row) => row.userEmail || 'Sin correo' },
+                { key: 'username', header: 'Username', render: (row) => row.username || '-' },
+                { key: 'status', header: 'Estado', render: () => 'Sin respuesta' },
               ]}
             />
           </div>

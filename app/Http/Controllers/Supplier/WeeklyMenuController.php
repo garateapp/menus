@@ -34,7 +34,10 @@ class WeeklyMenuController extends Controller
                     ->whereDate('menu_date', '>=', $calendar['range_start'])
                     ->whereDate('menu_date', '<=', $calendar['range_end'])
                     ->orderBy('menu_date'),
-                'dailyMenus.menuOptions' => fn ($query) => $query->withCount('selections')->orderBy('sort_order'),
+                'dailyMenus.menuOptions' => fn ($query) => $query
+                    ->withCount('selections')
+                    ->orderByDesc('is_opt_out')
+                    ->orderBy('sort_order'),
             ])
             ->orderBy('week_start_date')
             ->get();
@@ -128,7 +131,10 @@ class WeeklyMenuController extends Controller
 
         $weeklyMenu->load([
             'dailyMenus' => fn ($query) => $query->orderBy('menu_date'),
-            'dailyMenus.menuOptions' => fn ($query) => $query->withCount('selections')->orderBy('sort_order'),
+            'dailyMenus.menuOptions' => fn ($query) => $query
+                ->withCount('selections')
+                ->orderByDesc('is_opt_out')
+                ->orderBy('sort_order'),
         ]);
 
         return Inertia::render('Supplier/WeeklyMenus/Show', [
@@ -175,7 +181,7 @@ class WeeklyMenuController extends Controller
                 'weekly_menu_id' => $weeklyMenu?->id,
                 'daily_menu_id' => $dailyMenu?->id,
                 'status' => $dailyMenu?->status?->value ?? $weeklyMenu?->status?->value,
-                'options_count' => $dailyMenu ? ($dailyMenu->menuOptions->count()) : 0,
+                'options_count' => $dailyMenu ? $dailyMenu->menuOptions->where('is_opt_out', false)->count() : 0,
                 'title' => $weeklyMenu?->title,
             ];
         }, $days);
