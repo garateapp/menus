@@ -62,8 +62,11 @@ class MenuReportsTest extends TestCase
         $supplier = $this->createSupplier();
         [$weeklyMenu, $dailyMenu, $firstOption] = $this->createReportScenario($supplier);
 
+        $worker = $this->createWorker(['name' => 'Con selección semanal']);
+        $pendingWorker = $this->createWorker(['name' => 'Sin respuesta semanal']);
+
         MenuSelection::query()->create([
-            'user_id' => $this->createWorker()->id,
+            'user_id' => $worker->id,
             'daily_menu_id' => $dailyMenu->id,
             'menu_option_id' => $firstOption->id,
             'selected_at' => now(),
@@ -77,6 +80,12 @@ class MenuReportsTest extends TestCase
             ->component('Supplier/Reports/Weekly')
             ->where('report.totalSelections', 1)
             ->has('report.days', 1)
+            ->where('report.days.0.noResponsesCount', 1)
+            ->has('report.days.0.noResponses', 1)
+            ->where('report.days.0.noResponses.0.userName', $pendingWorker->name)
+            ->has('report.summaryRows')
+            ->where('report.summaryRows.0.userName', $worker->name)
+            ->where('report.summaryRows.0.optionTitle', 'Pollo')
         );
     }
 
@@ -182,6 +191,7 @@ class MenuReportsTest extends TestCase
             ->where('report.selectedDay.date', $secondDay->menu_date->toDateString())
             ->where('report.selectedDay.totalSelections', 1)
             ->has('report.selectedDay.options', 2)
+            ->has('report.selectedDay.noResponses')
         );
     }
 

@@ -21,14 +21,18 @@ class WeeklyReportExport implements WithMultipleSheets
             ['Estado', $this->report['status']],
             ['Total semanal', $this->report['totalSelections']],
             [],
-            ['Fecha', 'Estado', 'Cantidad seleccionada'],
+            ['Fecha', 'Estado', 'Usuario', 'Correo', 'Username', 'Selección', 'Respuesta'],
         ];
 
-        foreach ($this->report['days'] as $day) {
+        foreach ($this->report['summaryRows'] as $row) {
             $summaryRows[] = [
-                $day['menuDate'],
-                $day['status'],
-                $day['totalSelections'],
+                $row['menuDate'],
+                $row['status'],
+                $row['userName'] ?: 'Sin nombre',
+                $row['userEmail'] ?: 'Sin correo',
+                $row['username'] ?: '-',
+                $row['optionTitle'],
+                $row['responseStatus'],
             ];
         }
 
@@ -41,6 +45,7 @@ class WeeklyReportExport implements WithMultipleSheets
                 ['Fecha', $day['menuDate']],
                 ['Estado', $day['status']],
                 ['Total a confeccionar', $day['totalSelections']],
+                ['No respondidos', $day['noResponsesCount']],
                 [],
                 ['Fecha', 'Alternativa', 'Descripción', 'Cantidad seleccionada'],
             ];
@@ -54,8 +59,20 @@ class WeeklyReportExport implements WithMultipleSheets
                 ];
             }
 
-            if (count($dayRows) === 5) {
+            if (count($dayRows) === 6) {
                 $dayRows[] = [$day['menuDate'], 'Sin alternativas', '', 0];
+            }
+
+            $dayRows[] = [];
+            $dayRows[] = ['Usuario sin respuesta', 'Correo', 'Username', 'Estado'];
+
+            foreach ($day['noResponses'] as $user) {
+                $dayRows[] = [
+                    $user['userName'] ?: 'Sin nombre',
+                    $user['userEmail'] ?: 'Sin correo',
+                    $user['username'] ?: '-',
+                    'Sin respuesta',
+                ];
             }
 
             $sheets[] = new ArraySheetExport('Dia '.$day['menuDate'], $dayRows);

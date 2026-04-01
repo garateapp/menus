@@ -14,11 +14,40 @@ type Props = {
     weeklyMenuId: number;
     title: string;
     totalSelections: number;
-    days: { id: number; menuDate: string; status: string; totalSelections: number; options: { id: number; title: string; description?: string; totalSelections: number }[] }[];
+    days: {
+      id: number;
+      menuDate: string;
+      status: string;
+      totalSelections: number;
+      noResponsesCount: number;
+      noResponses: {
+        id: number;
+        userName?: string | null;
+        userEmail?: string | null;
+        username?: string | null;
+      }[];
+      options: { id: number; title: string; description?: string; totalSelections: number }[];
+    }[];
+    summaryRows: {
+      menuDate: string;
+      status: string;
+      userName?: string | null;
+      userEmail?: string | null;
+      username?: string | null;
+      optionTitle: string;
+      responseStatus: string;
+    }[];
     selectedDay?: {
       date: string;
       status: string;
       totalSelections: number;
+      noResponsesCount: number;
+      noResponses: {
+        id: number;
+        userName?: string | null;
+        userEmail?: string | null;
+        username?: string | null;
+      }[];
       options: { id: number; title: string; description?: string; totalSelections: number }[];
     } | null;
   } | null;
@@ -88,11 +117,15 @@ export default function Weekly({ availableWeeks, selectedWeeklyMenuId, selectedD
           </div>
           <div className="mt-6">
             <DataTable
-              rows={report.days}
+              rows={report.summaryRows}
               columns={[
                 { key: 'date', header: 'Fecha', render: (row) => formatDisplayDate(row.menuDate) },
                 { key: 'status', header: 'Estado', render: (row) => row.status },
-                { key: 'count', header: 'Selecciones', render: (row) => row.totalSelections },
+                { key: 'userName', header: 'Usuario', render: (row) => row.userName || 'Sin nombre' },
+                { key: 'userEmail', header: 'Correo', render: (row) => row.userEmail || 'Sin correo' },
+                { key: 'username', header: 'Username', render: (row) => row.username || '-' },
+                { key: 'optionTitle', header: 'Selección', render: (row) => row.optionTitle },
+                { key: 'responseStatus', header: 'Respuesta', render: (row) => row.responseStatus },
               ]}
             />
           </div>
@@ -102,7 +135,7 @@ export default function Weekly({ availableWeeks, selectedWeeklyMenuId, selectedD
                 <div className="card-body">
                   <h2 className="card-title">Detalle del día {formatDisplayDate(report.selectedDay.date)}</h2>
                   <p className="text-sm text-base-content/60">
-                    Estado: {report.selectedDay.status} | Total a confeccionar: {report.selectedDay.totalSelections}
+                    Estado: {report.selectedDay.status} | Total a confeccionar: {report.selectedDay.totalSelections} | No respondidos: {report.selectedDay.noResponsesCount}
                   </p>
                 </div>
               </div>
@@ -112,6 +145,23 @@ export default function Weekly({ availableWeeks, selectedWeeklyMenuId, selectedD
                   { key: 'title', header: 'Alternativa', render: (row) => row.title },
                   { key: 'description', header: 'Descripción', render: (row) => row.description || 'Sin descripción' },
                   { key: 'count', header: 'Selecciones', render: (row) => row.totalSelections },
+                ]}
+              />
+              <div className="panel-card">
+                <div className="card-body">
+                  <h2 className="card-title">Trabajadores sin respuesta</h2>
+                  <p className="text-sm text-base-content/60">
+                    Nómina de trabajadores activos que aún no registran selección para este día.
+                  </p>
+                </div>
+              </div>
+              <DataTable
+                rows={report.selectedDay.noResponses}
+                columns={[
+                  { key: 'userName', header: 'Usuario', render: (row) => row.userName || 'Sin nombre' },
+                  { key: 'userEmail', header: 'Correo', render: (row) => row.userEmail || 'Sin correo' },
+                  { key: 'username', header: 'Username', render: (row) => row.username || '-' },
+                  { key: 'status', header: 'Estado', render: () => 'Sin respuesta' },
                 ]}
               />
             </div>
