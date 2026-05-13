@@ -15,8 +15,8 @@ class GoogleAuthService
     {
         $email = Str::lower((string) $googleUser->getEmail());
         $allowedDomain = Str::lower((string) config('services.google.allowed_domain'));
-
-        if ($email === '' || ! Str::endsWith($email, '@'.$allowedDomain)) {
+        $allowedDomains = ['greenex.cl', 'novafresh.cl']; // 👈 Agrega el nuevo dominio
+        if ($email === '' || ! Str::endsWith($email, '@'.$allowedDomains)) {
             throw new AuthenticationException('Solo se permiten correos corporativos.');
         }
 
