@@ -8,7 +8,7 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
-
+use Illuminate\Support\Facades\Log;
 class GoogleAuthController extends Controller
 {
     public function __construct(
@@ -26,15 +26,16 @@ class GoogleAuthController extends Controller
 
     public function callback(): RedirectResponse
     {
-        \Log::info('Google Callback - User Data', [
-            'email' => $googleUser->getEmail(),
-            'id' => $googleUser->getId(),
-            'hd' => request('hd'),
-        ]);
+
         try {
             $user = $this->googleAuthService->authenticate(
                 Socialite::driver('google')->stateless()->user()
             );
+             Log::info('Google Callback - User Data', [
+            'email' => $user->getEmail(),
+            'id' => $user->getId(),
+            'hd' => request('hd'),
+        ]);
         } catch (AuthenticationException $exception) {
             return redirect()
                 ->route('login')
