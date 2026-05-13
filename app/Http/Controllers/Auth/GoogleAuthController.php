@@ -26,6 +26,11 @@ class GoogleAuthController extends Controller
 
     public function callback(): RedirectResponse
     {
+        \Log::info('Google Callback - User Data', [
+            'email' => $googleUser->getEmail(),
+            'id' => $googleUser->getId(),
+            'hd' => request('hd'),
+        ]);
         try {
             $user = $this->googleAuthService->authenticate(
                 Socialite::driver('google')->stateless()->user()
